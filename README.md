@@ -2,14 +2,11 @@
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/dive-be/laravel-csv-translation-import.svg?style=flat-square)](https://packagist.org/packages/dive-be/laravel-csv-translation-import)
 
-
-This is where your description should go. Limit it to a paragraph or two. Consider adding a small example.
-
 ⚠️ Minor releases of this package may cause breaking changes as it has no stable release yet.
 
 ## What problem does this package solve?
 
-Optionally describe why someone would want to use this package.
+Sometimes, clients will use translation services and supply CSV files with translations. You can use this package to import those translations.
 
 ## Installation
 
@@ -19,30 +16,41 @@ You can install the package via composer:
 composer require dive-be/laravel-csv-translation-import
 ```
 
-You can publish and run the migrations with:
-
-```bash
-php artisan vendor:publish --provider="Dive\TranslationImport\TranslationImportServiceProvider" --tag="migrations"
-php artisan migrate
-```
-
-You can publish the config file with:
-```bash
-php artisan vendor:publish --provider="Dive\TranslationImport\TranslationImportServiceProvider" --tag="config"
-```
-
 This is the contents of the published config file:
 
 ```php
 return [
+    'exclude' => [],
 ];
 ```
 
 ## Usage
 
+A common usage is to load specific translations from a CSV file. You can take the loaded translations and save them to your Laravel translations.
+
 ```php
-$laravel-csv-translation-import = new Dive\TranslationImport();
-echo $laravel-csv-translation-import->echoPhrase('Hello, Dive!');
+TranslationImport::make()
+    ->parseFile('/path/to/translations.csv', 'es')
+    ->persist('es');
+```
+
+You may wish to load the existing translations first, and then save the merged list of translations:
+
+```php
+TranslationImport::make()
+    ->load('es')
+    ->parseFile('/path/to/translations.csv', 'es')
+    ->persist('es');
+```
+
+If you do not want to override translation keys that already exist (and only import new ones), you can configure the `TranslationImport` instance, like this:
+
+```php
+TranslationImport::make()
+    ->configure(replacesExistingValues: false)
+    ->load('es')
+    ->parseFile('/path/to/translations.csv', 'es')
+    ->persist('es');
 ```
 
 ## Testing

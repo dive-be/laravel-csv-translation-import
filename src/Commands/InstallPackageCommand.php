@@ -26,13 +26,6 @@ class InstallPackageCommand extends Command
             '--tag' => 'config',
         ]);
 
-        $this->line('📑  Publishing migration...');
-
-        $this->call('vendor:publish', [
-            '--provider' => "Dive\TranslationImport\TranslationImportServiceProvider",
-            '--tag' => 'migrations',
-        ]);
-
         $this->info('🏁  TranslationImport installed successfully!');
 
         return self::SUCCESS;
