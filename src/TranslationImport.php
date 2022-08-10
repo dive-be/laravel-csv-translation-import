@@ -116,7 +116,7 @@ class TranslationImport
                 $segments = explode('-', $key, 2);
 
                 if (count($segments) == 1) {
-                    throw \Exception("The key `$key` is invalid: it must contain a separator character (`-`).");
+                    throw new \Exception("The key `$key` is invalid: it must contain a separator character (`-`).");
                 }
 
                 return (object) [
