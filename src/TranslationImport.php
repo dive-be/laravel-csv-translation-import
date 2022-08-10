@@ -3,8 +3,10 @@
 namespace Dive\TranslationImport;
 
 use Illuminate\Support\Facades\File;
+use Symfony\Component\VarExporter\Exception\ExceptionInterface;
 use Symfony\Component\VarExporter\VarExporter;
 use League\Csv\Reader;
+use Exception;
 
 class TranslationImport
 {
@@ -92,13 +94,28 @@ class TranslationImport
         return $this->translations;
     }
 
+    /**
+     * Persist the translations for the chosen locale(s).
+     * If the target directory isn't set, this will (over)write translations into the current Laravel app's lang path.
+     *
+     * @throws \Exception
+     * @throws ExceptionInterface
+     */
     public function persist(string|array $locales, ?string $baseDirectory = null): self
     {
         $basePath = $baseDirectory ?? lang_path();
 
         foreach ($this->translations as $locale => $translations) {
+            if (!in_array($locale, $locales)) {
+                break;
+            }
+
             $translations = collect($translations)->map(function ($translation, $key) {
                 $segments = explode('-', $key, 2);
+
+                if (count($segments) == 1) {
+                    throw \Exception("The key `$key` is invalid: it must contain a separator character (`-`).");
+                }
 
                 return (object) [
                     'file' => $segments[0],
