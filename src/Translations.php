@@ -19,7 +19,7 @@ class Translations
             ->map(static fn($trans, $key) => collect(Arr::dot($trans)))
             ->flatMap(static function ($translations, $file) {
                 return $translations->mapWithKeys(function ($value, $key) use ($file) {
-                    return [implode('.', [$file, $key]) => $value];
+                    return [implode('-', [$file, $key]) => $value];
                 });
             });
     }
