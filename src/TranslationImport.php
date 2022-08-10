@@ -105,6 +105,8 @@ class TranslationImport
     {
         $basePath = $baseDirectory ?? lang_path();
 
+        $locales = is_array($locales) ? $locales : [$locales];
+
         foreach ($this->translations as $locale => $translations) {
             if (!in_array($locale, $locales)) {
                 break;
