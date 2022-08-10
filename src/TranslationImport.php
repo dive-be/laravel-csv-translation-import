@@ -81,6 +81,10 @@ class TranslationImport
                 ) {
                     break;
                 }
+                
+                if (empty(trim($record['key']))) {
+                    break;
+                }
 
                 $this->translations[$locale][$record['key']] = $record[$locale];
             }

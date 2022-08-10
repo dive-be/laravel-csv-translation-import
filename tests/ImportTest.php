@@ -79,6 +79,24 @@ it('can source translations from a file', function () {
     ], $translations);
 });
 
+it('skips keys that are empty', function () {
+    $csv = <<<CSV
+        key;nl;es
+        b2b/ticket-summary;Overzicht;Resumen
+        ;empty;key
+        CSV;
+
+    $translations = TranslationImport::make()
+        ->parseString($csv, ['nl'])
+        ->toArray();
+
+    $this->assertEquals([
+        'nl' => [
+            'b2b/ticket-summary' => 'Overzicht',
+        ],
+    ], $translations);
+});
+
 it('populates keys as empty if locale is missing', function () {
     $csv = <<<CSV
         key;nl;es
