@@ -81,7 +81,7 @@ class TranslationImport
                 ) {
                     break;
                 }
-                
+
                 if (empty(trim($record['key']))) {
                     break;
                 }
@@ -116,6 +116,11 @@ class TranslationImport
                 break;
             }
 
+            $localeDir = $basePath . '/' . $locale;
+            if (! File::isDirectory($localeDir)) {
+                File::makeDirectory($localeDir, 493, true);
+            }
+
             $translations = collect($translations)->map(function ($translation, $key) {
                 $segments = explode('-', $key, 2);
 
@@ -133,7 +138,6 @@ class TranslationImport
             foreach ($translations as $file => $items) {
                 if (preg_match('/(.*)\/[^\/]+$/', $file, $matches)) {
                     $path = $basePath . '/' . $locale . '/' . $matches[1];
-
                     if (! File::isDirectory($path)) {
                         File::makeDirectory($path, 493, true);
                     }
