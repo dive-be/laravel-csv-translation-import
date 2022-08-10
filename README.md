@@ -26,21 +26,40 @@ return [
 
 ## Usage
 
-A common usage is to load specific translations from a CSV file. You can take the loaded translations and save them to your Laravel translations.
+A common usage is to load specific translations from a CSV file. 
 
-```php
-TranslationImport::make()
-    ->parseFile('/path/to/translations.csv', 'es')
-    ->persist('es');
+### CSV file constraints
+
+* The CSV file must have headers corresponding to the different locales.
+* The translation key's header must be `key`.
+* You must also use a semicolon (`;`) to separate columns.
+* You cannot have duplicate column names (you may wish to rename empty columns after exporting from Excel or Numbers).
+
+A valid file looks like this:
+
+```csv
+key,nl,en
+auth-login.title;Aanmelden;Log In
+auth-login.description;Vul hieronder je gegevens in.;Fill in your details below.
 ```
 
-You may wish to load the existing translations first, and then save the merged list of translations:
+### Example usage
+
+You can take the loaded translations and save them to your Laravel translations.
 
 ```php
 TranslationImport::make()
-    ->load('es')
-    ->parseFile('/path/to/translations.csv', 'es')
-    ->persist('es');
+    ->parseFile('/path/to/translations.csv', 'nl')
+    ->persist('nl');
+```
+
+You may wish to load the existing translations from your Laravel app first, and then save (overwrite) the merged list of translations:
+
+```php
+TranslationImport::make()
+    ->load('nl')
+    ->parseFile('/path/to/translations.csv', 'nl')
+    ->persist('nl');
 ```
 
 If you do not want to override translation keys that already exist (and only import new ones), you can configure the `TranslationImport` instance, like this:
