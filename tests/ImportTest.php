@@ -22,6 +22,8 @@ it('can load existing translations (and loading strips newlines)', function () {
             'passwords-throttled' => 'Please wait before retrying.',
             'passwords-token' => 'This password reset token is invalid.',
             'passwords-user' => "We can't find a user with that email address.",
+            'passwords-validation.failed' => 'Validation failed',
+            'passwords-validation.passed' => 'Validation passed'
         ],
         'fr' => [
             'passwords-reset' => 'Votre mot de passe a été réinitialisé !!',

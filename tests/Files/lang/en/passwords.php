@@ -7,4 +7,9 @@ return [
     'token' => 'This password reset token 
     is invalid.',
     'user' => "We can't find a user with that email address.",
+
+    'validation' => [
+        'failed' => 'Validation failed',
+        'passed' => 'Validation passed',
+    ]
 ];
