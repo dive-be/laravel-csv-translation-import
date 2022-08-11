@@ -34,9 +34,6 @@ class TestCase extends BaseTestCase
 
     private function useTestLanguageFiles()
     {
-        $this->app->forgetInstance('translator');
-        $this->app->forgetInstance('translator.loader');
-
         $this->app->useLangPath(testDirectory('Files/lang'));
     }
 }
