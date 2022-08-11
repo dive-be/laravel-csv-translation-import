@@ -2,19 +2,23 @@
 
 namespace Dive\TranslationImport;
 
+use Dive\Crowbar\Crowbar;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Lang;
 
 class Translations
 {
-    public static function get(string $locale): Collection
+    public static function get(string $locale, ?string $alternatePath): Collection
     {
-        $path = lang_path($locale);
+        $originalPath = lang_path();
 
-        return self::getFilePaths($path)
-            ->mapWithKeys(static fn($file) => [$file => Lang::get($file, [], $locale)])
+        if ($alternatePath != null) {
+            self::setTranslatorPath($alternatePath);
+        }
+
+        $paths = self::getFilePaths(lang_path($locale))
+            ->mapWithKeys(static fn($file) => [$file => __($file, [], $locale)])
             ->filter(static fn($trans) => is_array($trans) && !empty($trans))
             ->map(static fn($trans, $key) => collect(Arr::dot($trans)))
             ->flatMap(static function ($translations, $file) {
@@ -22,6 +26,12 @@ class Translations
                     return [implode('-', [$file, $key]) => $value];
                 });
             });
+
+        if ($alternatePath != null) {
+            self::setTranslatorPath($originalPath);
+        }
+
+        return $paths;
     }
 
     private static function getFilePaths(string $path = null): Collection
@@ -35,5 +45,12 @@ class Translations
             ))
             ->filter(static fn($file) => !$excludeFiles->contains($file))
             ->flatten();
+    }
+
+    private static function setTranslatorPath(string $path)
+    {
+        app()->useLangPath($path);
+        Crowbar::pry(app('translation.loader'))->path = $path;
+        app('translator')->setLoaded([]);
     }
 }

@@ -27,12 +27,12 @@ class TranslationImport
         return $this;
     }
 
-    public function load(string|array $onlyLocales): self
+    public function load(string|array $onlyLocales, ?string $path = null): self
     {
         $locales = is_array($onlyLocales) ? $onlyLocales : [$onlyLocales];
 
         foreach ($locales as $locale) {
-            $this->translations[$locale] = Translations::get($locale)->toArray();
+            $this->translations[$locale] = Translations::get($locale, $path)->toArray();
         }
 
         return $this;

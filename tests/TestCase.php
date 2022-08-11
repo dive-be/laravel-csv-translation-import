@@ -25,11 +25,6 @@ class TestCase extends BaseTestCase
     protected function setUpDatabase($app)
     {
         $app->make('db')->connection()->getSchemaBuilder()->dropAllTables();
-
-        /*
-        $laravel-csv-translation-import = require __DIR__ . '/../database/migrations/create_laravel_csv_translation_import_table.php.stub';
-        $laravel-csv-translation-import->up();
-        */
     }
 
     private function useTestLanguageFiles()

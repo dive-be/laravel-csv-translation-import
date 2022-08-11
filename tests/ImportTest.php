@@ -33,6 +33,30 @@ it('can load existing translations', function () {
     ], $translations);
 });
 
+it('can load existing translations from separate directory', function () {
+    $translations = TranslationImport::make()
+        // we want to load the slightly altered alternate translations
+        ->load(['en', 'fr'], testDirectory('Files/alternate'));
+
+    $this->assertArrayHasKey('en', $translations->toArray());
+    $this->assertArrayHasKey('fr', $translations->toArray());
+
+    // Make sure that the slightly altered string is correct
+    $this->assertEquals(
+        'Votre mot de passe a été réinitialisé !',
+        $translations->toArray()['fr']['passwords-reset']
+    );
+
+    // Load the normal translations (should revert to original directory)
+    $translations->load('fr');
+
+    // Make sure that the original string loaded back in
+    $this->assertEquals(
+        'Votre mot de passe a été réinitialisé !!',
+        $translations->toArray()['fr']['passwords-reset']
+    );
+});
+
 it('can populate the translations based on a csv file', function () {
     $csv = <<<CSV
         key;nl;es
