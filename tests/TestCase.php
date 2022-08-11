@@ -4,6 +4,7 @@ namespace Tests;
 
 use Dive\TranslationImport\TranslationImportServiceProvider;
 use Orchestra\Testbench\TestCase as BaseTestCase;
+use function Pest\testDirectory;
 
 class TestCase extends BaseTestCase
 {
@@ -12,6 +13,8 @@ class TestCase extends BaseTestCase
         parent::setUp();
 
         $this->setUpDatabase($this->app);
+
+        $this->useTestLanguageFiles();
     }
 
     protected function getPackageProviders($app)
@@ -27,5 +30,13 @@ class TestCase extends BaseTestCase
         $laravel-csv-translation-import = require __DIR__ . '/../database/migrations/create_laravel_csv_translation_import_table.php.stub';
         $laravel-csv-translation-import->up();
         */
+    }
+
+    private function useTestLanguageFiles()
+    {
+        $this->app->forgetInstance('translator');
+        $this->app->forgetInstance('translator.loader');
+
+        $this->app->useLangPath(testDirectory('Files/lang'));
     }
 }

@@ -6,17 +6,15 @@ use Dive\TranslationImport\TranslationImport;
 use Illuminate\Support\Facades\Storage;
 use function Pest\testDirectory;
 
-/*
 it('can load existing translations', function () {
     $translations = TranslationImport::make()
         // if we want to start with our existing TL
-        ->load(['en', 'nl'])
+        ->load(['en', 'fr'])
         ->toArray();
 
     $this->assertArrayHasKey('en', $translations);
-    $this->assertArrayHasKey('nl', $translations);
+    $this->assertArrayHasKey('fr', $translations);
 });
-*/
 
 /* This would be ideal, but isn't currently possible. You can't (currently) override where to load translations from.
 it('can load existing translations from an arbitrary path', function () {
