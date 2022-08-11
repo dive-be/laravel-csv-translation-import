@@ -14,33 +14,24 @@ it('can load existing translations', function () {
 
     $this->assertArrayHasKey('en', $translations);
     $this->assertArrayHasKey('fr', $translations);
-});
-
-/* This would be ideal, but isn't currently possible. You can't (currently) override where to load translations from.
-it('can load existing translations from an arbitrary path', function () {
-    $translations = TranslationImport::make()
-        ->load('en', testDirectory('Files/lang/en'))
-        ->load('fr', testDirectory('Files/lang/fr'))
-        ->toArray();
 
     $this->assertEquals([
         'en' => [
-            'passwords.reset' => 'Your password has been reset!',
-            'passwords.sent' => 'We have emailed your password reset link!',
-            'passwords.throttled' => 'Please wait before retrying.',
-            'passwords.token' => 'This password reset token is invalid.',
-            'passwords.user' => "We can't find a user with that email address.",
+            'passwords-reset' => 'Your password has been reset!',
+            'passwords-sent' => 'We have emailed your password reset link!',
+            'passwords-throttled' => 'Please wait before retrying.',
+            'passwords-token' => 'This password reset token is invalid.',
+            'passwords-user' => "We can't find a user with that email address.",
         ],
         'fr' => [
-            'passwords.reset' => 'Votre mot de passe a été réinitialisé !!',
-            'passwords.sent' => 'Nous vous avons envoyé par email le lien de réinitialisation du mot de passe !',
-            'passwords.throttled' => 'Veuillez patienter avant de réessayer.',
-            'passwords.token' => "Ce jeton de réinitialisation du mot de passe n'est pas valide.",
-            'passwords.user' => "Aucun utilisateur n'a été trouvé avec cette adresse email.",
+            'passwords-reset' => 'Votre mot de passe a été réinitialisé !!',
+            'passwords-sent' => 'Nous vous avons envoyé par email le lien de réinitialisation du mot de passe !',
+            'passwords-throttled' => 'Veuillez patienter avant de réessayer.',
+            'passwords-token' => "Ce jeton de réinitialisation du mot de passe n'est pas valide.",
+            'passwords-user' => "Aucun utilisateur n'a été trouvé avec cette adresse email.",
         ],
     ], $translations);
 });
-*/
 
 it('can populate the translations based on a csv file', function () {
     $csv = <<<CSV
