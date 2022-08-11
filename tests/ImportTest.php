@@ -6,7 +6,7 @@ use Dive\TranslationImport\TranslationImport;
 use Illuminate\Support\Facades\Storage;
 use function Pest\testDirectory;
 
-it('can load existing translations', function () {
+it('can load existing translations (and loading strips newlines)', function () {
     $translations = TranslationImport::make()
         // if we want to start with our existing TL
         ->load(['en', 'fr'])

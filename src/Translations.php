@@ -18,7 +18,13 @@ class Translations
         }
 
         $paths = self::getFilePaths(lang_path($locale))
-            ->mapWithKeys(static fn($file) => [$file => __($file, [], $locale)])
+            ->mapWithKeys(static fn($file) => [
+                // Two regular expressions here: one to prune excessive spaces, and one to remove newlines.
+                $file => preg_replace('/\s+/S', ' ', preg_replace(
+                    "/[\\n\\r]+/",
+                    '',
+                    __($file, [], $locale)
+                ))])
             ->filter(static fn($trans) => is_array($trans) && !empty($trans))
             ->map(static fn($trans, $key) => collect(Arr::dot($trans)))
             ->flatMap(static function ($translations, $file) {
