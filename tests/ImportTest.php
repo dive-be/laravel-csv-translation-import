@@ -94,6 +94,20 @@ it('can source translations from a file', function () {
     ], $translations);
 });
 
+it('can source translations from a file with a header offset', function () {
+    $translations = TranslationImport::make()
+        ->parseFile(testDirectory('Files/translations_header_offset.csv'), ['nl'], headerOffset: 2)
+        ->toArray();
+
+    $this->assertEquals([
+        'nl' => [
+            'b2b/ticket-summary' => 'Overzicht',
+            'b2b/ticket-total' => 'Totaal',
+            'b2b/wishlist-add' => 'Toevoegen aan favorieten',
+        ],
+    ], $translations);
+});
+
 it('skips keys that are empty', function () {
     $csv = <<<CSV
         key;nl;es
@@ -192,9 +206,11 @@ it('does not replace values when loading data if behavior is modified', function
         b2b/ticket-total;Totaal aantal records;Total
         CSV;
 
-    $translit
-        ->configure(replacesExistingValues: false)
-        ->parseString($csv2, ['nl']);
+    $translit->parseString(
+        content: $csv2,
+        onlyLocales: ['nl'],
+        replacingExistingValues: false
+    );
 
     $this->assertEquals([
         'nl' => [

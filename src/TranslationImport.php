@@ -6,7 +6,6 @@ use Illuminate\Support\Facades\File;
 use Symfony\Component\VarExporter\Exception\ExceptionInterface;
 use Symfony\Component\VarExporter\VarExporter;
 use League\Csv\Reader;
-use Exception;
 
 class TranslationImport
 {
@@ -17,15 +16,6 @@ class TranslationImport
 
     /** @var array<string, array> */
     private array $translations = [];
-
-    private bool $replacesExistingValues = true;
-
-    public function configure(bool $replacesExistingValues): self
-    {
-        $this->replacesExistingValues = $replacesExistingValues;
-
-        return $this;
-    }
 
     public function load(string|array $onlyLocales, ?string $path = null): self
     {
@@ -38,30 +28,44 @@ class TranslationImport
         return $this;
     }
 
-    public function parseFile(string $filePath, string|array $onlyLocales, $csvDelimiter = ';'): self
-    {
+    public function parseFile(
+        string $filePath,
+        string|array $onlyLocales,
+        string $csvDelimiter = ';',
+        int $headerOffset = 0,
+        bool $replacingExistingValues = true,
+    ): self {
         $csv = Reader::createFromPath($filePath);
 
-        $this->parseCsv($csv, $onlyLocales, $csvDelimiter);
+        $this->parseCsv($csv, $onlyLocales, $csvDelimiter, $headerOffset, $replacingExistingValues);
 
         return $this;
     }
 
-    public function parseString(string $content, string|array $onlyLocales, $csvDelimiter = ';'): self
-    {
+    public function parseString(
+        string $content,
+        string|array $onlyLocales,
+        string $csvDelimiter = ';',
+        bool $replacingExistingValues = true,
+    ): self {
         $csv = Reader::createFromString($content);
 
-        $this->parseCsv($csv, $onlyLocales, $csvDelimiter);
+        $this->parseCsv($csv, $onlyLocales, $csvDelimiter, 0, $replacingExistingValues);
 
         return $this;
     }
 
-    public function parseCsv(Reader $csv, string|array $onlyLocales, $csvDelimiter = ';'): self
-    {
+    public function parseCsv(
+        Reader $csv,
+        string|array $onlyLocales,
+        string $csvDelimiter,
+        int $headerOffset,
+        bool $replacingExistingValues,
+    ): self {
         $locales = is_array($onlyLocales) ? $onlyLocales : [$onlyLocales];
 
         $csv->setDelimiter($csvDelimiter);
-        $csv->setHeaderOffset(0);
+        $csv->setHeaderOffset($headerOffset);
 
         foreach ($locales as $locale) {
             if (! array_key_exists($locale, $this->translations)) {
@@ -69,7 +73,11 @@ class TranslationImport
             }
         }
 
-        foreach ($csv->getRecords() as $record) {
+        foreach ($csv->getRecords() as $index => $record) {
+            if ($headerOffset > $index) { // Ensure that rows before the header offset are ignored
+                continue;
+            }
+
             foreach ($locales as $locale) {
                 if (! array_key_exists($locale, $record)) {
                     $this->translations[$locale][$record['key']] = '';
@@ -77,7 +85,7 @@ class TranslationImport
                 }
 
                 if (array_key_exists($record['key'], $this->translations[$locale])
-                    && ! $this->replacesExistingValues
+                    && ! $replacingExistingValues
                 ) {
                     break;
                 }
