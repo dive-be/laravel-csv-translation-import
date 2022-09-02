@@ -80,6 +80,27 @@ it('can populate the translations based on a csv file', function () {
     ], $translations);
 });
 
+it('trims the contents of the keys and values if needed', function () {
+    $csv = <<<CSV
+        key;nl;es
+        b2b/ticket-summary  ;Overzicht;   Resumen
+        b2b/ticket-total  ;   Totaal     ;Total
+             b2b/wishlist-add;    Toevoegen aan favorieten   ;       Añadir a favoritos
+        CSV;
+
+    $translations = TranslationImport::make()
+        ->parseString($csv, ['nl'])
+        ->toArray();
+
+    $this->assertEquals([
+        'nl' => [
+            'b2b/ticket-summary' => 'Overzicht',
+            'b2b/ticket-total' => 'Totaal',
+            'b2b/wishlist-add' => 'Toevoegen aan favorieten',
+        ],
+    ], $translations);
+});
+
 it('can source translations from a file', function () {
     $translations = TranslationImport::make()
         ->parseFile(testDirectory('Files/translations.csv'), ['nl'])

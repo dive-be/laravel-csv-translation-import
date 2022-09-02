@@ -94,7 +94,7 @@ class TranslationImport
                     break;
                 }
 
-                $this->translations[$locale][$record['key']] = $record[$locale];
+                $this->translations[$locale][trim($record['key'])] = trim($record[$locale]);
             }
         }
 
