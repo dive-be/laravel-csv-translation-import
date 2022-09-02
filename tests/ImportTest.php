@@ -101,6 +101,30 @@ it('trims the contents of the keys and values if needed', function () {
     ], $translations);
 });
 
+it('can sort the keys alphabetically (and reversed)', function () {
+    $csv = <<<CSV
+        key;en
+        greeting.all;All
+        greeting.welcome;Welcome
+        greeting.goodbye;Farewell
+        CSV;
+
+    $translations = TranslationImport::make()
+        ->parseString($csv, ['en']);
+
+    $regular = $translations->sort(ascending: true)->toArray();
+
+    $this->assertEquals('greeting.all', array_keys($regular['en'])[0]);
+    $this->assertEquals('greeting.goodbye', array_keys($regular['en'])[1]);
+    $this->assertEquals('greeting.welcome', array_keys($regular['en'])[2]);
+
+    $reverse = $translations->sort(ascending: false)->toArray();
+
+    $this->assertEquals('greeting.all', array_keys($reverse['en'])[2]);
+    $this->assertEquals('greeting.goodbye', array_keys($reverse['en'])[1]);
+    $this->assertEquals('greeting.welcome', array_keys($reverse['en'])[0]);
+});
+
 it('can source translations from a file', function () {
     $translations = TranslationImport::make()
         ->parseFile(testDirectory('Files/translations.csv'), ['nl'])

@@ -101,6 +101,15 @@ class TranslationImport
         return $this;
     }
 
+    public function sort($ascending = true): self
+    {
+        foreach ($this->translations as $locale => &$values) {
+            $ascending ? ksort($values) : krsort($values);
+        }
+
+        return $this;
+    }
+
     public function toArray(): array
     {
         return $this->translations;
