@@ -26,22 +26,7 @@ return [
 
 ## Usage
 
-A common usage is to load or export specific translations from a CSV file. 
-
-### CSV file constraints (for importing translations)
-
-* The CSV file must have headers corresponding to the different locales.
-* The translation key's header must be `key`.
-* By default, you must use a semicolon (`;`) to separate columns. (You can modify the delimiter character.)
-* You cannot have duplicate column names (you may wish to rename empty columns after exporting from Excel or Numbers).
-
-A valid file looks like this:
-
-```csv
-key,nl,en
-auth-login.title;Aanmelden;Log In
-auth-login.description;Vul hieronder je gegevens in.;Fill in your details below.
-```
+A common usage is to load or export specific translations from a CSV file.
 
 ### Example usage
 
@@ -91,6 +76,20 @@ Lingo::make()
     ->exportToCsvFile('path/to/output.csv', $languages);
 ```
 
+### CSV file constraints (for importing translations)
+
+* The CSV file must have headers corresponding to the different locales.
+* The translation key's header must be `key`.
+* By default, you must use a semicolon (`;`) to separate columns. (You can modify the delimiter character.)
+* You cannot have duplicate column names (you may wish to rename empty columns after exporting from Excel or Numbers).
+
+A valid file looks like this:
+
+```csv
+key,nl,en
+auth-login.title;Aanmelden;Log In
+auth-login.description;Vul hieronder je gegevens in.;Fill in your details below.
+```
 
 ## Testing
 

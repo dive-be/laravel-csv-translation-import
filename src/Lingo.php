@@ -40,13 +40,13 @@ class Lingo
     public function parseFile(
         string $filePath,
         string|array $onlyLocales,
-        string $csvDelimiter = ';',
+        string $delimiter = ';',
         int $headerOffset = 0,
         bool $replacingExistingValues = true,
     ): self {
         $csv = Reader::createFromPath($filePath);
 
-        $this->parseCsv($csv, $onlyLocales, $csvDelimiter, $headerOffset, $replacingExistingValues);
+        $this->parseCsv($csv, $onlyLocales, $delimiter, $headerOffset, $replacingExistingValues);
 
         return $this;
     }
@@ -57,12 +57,12 @@ class Lingo
     public function parseString(
         string $content,
         string|array $onlyLocales,
-        string $csvDelimiter = ';',
+        string $delimiter = ';',
         bool $replacingExistingValues = true,
     ): self {
         $csv = Reader::createFromString($content);
 
-        $this->parseCsv($csv, $onlyLocales, $csvDelimiter, 0, $replacingExistingValues);
+        $this->parseCsv($csv, $onlyLocales, $delimiter, 0, $replacingExistingValues);
 
         return $this;
     }
@@ -144,7 +144,7 @@ class Lingo
     /**
      * Writes the contents of all the translations to a CSV file at the given path.
      */
-    public function exportToCsvFile(string $path, string|array $locales, $delimiter = ";"): self
+    public function exportToCsvFile(string $path, string|array $locales, string $delimiter = ";"): self
     {
         $csv = Writer::createFromPath($path, 'w+');
         $this->exportToCsv($csv, $locales, $delimiter);
@@ -163,7 +163,7 @@ class Lingo
      * Returns a string representation containing all the translations for a given locale.
      * The string output is the same as the contents of a CSV file would be.
      */
-    public function toCsvString(string|array $locales, $delimiter = ";"): string
+    public function toCsvString(string|array $locales, string $delimiter = ";"): string
     {
         $csv = Writer::createFromString();
         $this->exportToCsv($csv, $locales, $delimiter);
@@ -173,13 +173,13 @@ class Lingo
     private function parseCsv(
         Reader $csv,
         string|array $locales,
-        string $csvDelimiter,
+        string $delimiter,
         int $headerOffset,
         bool $replacingExistingValues,
     ): void {
         $locales = is_array($locales) ? $locales : [$locales];
 
-        $csv->setDelimiter($csvDelimiter);
+        $csv->setDelimiter($delimiter);
         $csv->setHeaderOffset($headerOffset);
 
         foreach ($locales as $locale) {
@@ -217,7 +217,7 @@ class Lingo
     private function exportToCsv(
         Writer $csv,
         string|array $locales,
-        $delimiter = ";"
+        string $delimiter = ";"
     ): void {
         $locales = is_array($locales) ? $locales : [$locales];
 
