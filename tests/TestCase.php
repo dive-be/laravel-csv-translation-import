@@ -2,7 +2,7 @@
 
 namespace Tests;
 
-use Dive\TranslationImport\TranslationImportServiceProvider;
+use Dive\Lingo\LingoServiceProvider;
 use Orchestra\Testbench\TestCase as BaseTestCase;
 use function Pest\testDirectory;
 
@@ -19,7 +19,7 @@ class TestCase extends BaseTestCase
 
     protected function getPackageProviders($app)
     {
-        return [TranslationImportServiceProvider::class];
+        return [LingoServiceProvider::class];
     }
 
     protected function setUpDatabase($app)

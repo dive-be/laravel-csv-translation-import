@@ -1,2 +1,2 @@
 providers:
-  - Dive\TranslationImport\TranslationImportServiceProvider
+  - Dive\Lingo\LingoServiceProvider

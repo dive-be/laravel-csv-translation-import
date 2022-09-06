@@ -1,38 +1,38 @@
 <?php declare(strict_types=1);
 
-namespace Dive\TranslationImport\Commands;
+namespace Dive\Lingo\Commands;
 
 use Illuminate\Console\Command;
 
 class InstallPackageCommand extends Command
 {
-    protected $description = 'Install laravel-csv-translation-import.';
+    protected $description = 'Installs Lingo.';
 
-    protected $signature = 'laravel-csv-translation-import:install';
+    protected $signature = 'lingo:install';
 
     public function handle(): int
     {
         if ($this->isHidden()) {
-            $this->error('🤚  TranslationImport is already installed.');
+            $this->error('🤚  Lingo is already installed.');
 
             return self::FAILURE;
         }
 
-        $this->line('🏎  Installing laravel-csv-translation-import...');
+        $this->line('🏎  Installing Lingo...');
         $this->line('📑  Publishing configuration...');
 
         $this->call('vendor:publish', [
-            '--provider' => "Dive\TranslationImport\TranslationImportServiceProvider",
+            '--provider' => "Dive\Lingo\LingoServiceProvider",
             '--tag' => 'config',
         ]);
 
-        $this->info('🏁  TranslationImport installed successfully!');
+        $this->info('🏁  Lingo installed successfully!');
 
         return self::SUCCESS;
     }
 
     public function isHidden(): bool
     {
-        return file_exists(config_path('laravel-csv-translation-import.php'));
+        return file_exists(config_path('lingo.php'));
     }
 }

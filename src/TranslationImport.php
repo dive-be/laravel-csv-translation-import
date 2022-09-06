@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Dive\TranslationImport;
+namespace Dive\Lingo;
 
 use Illuminate\Support\Facades\File;
 use Symfony\Component\VarExporter\Exception\ExceptionInterface;

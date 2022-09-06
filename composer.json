@@ -1,11 +1,8 @@
 {
-    "name": "dive-be/laravel-csv-translation-import",
-    "description": "Import translations from CSV files",
-    "keywords": [
-        "dive",
-        "laravel-csv-translation-import"
-    ],
-    "homepage": "https://github.com/dive-be/laravel-csv-translation-import",
+    "name": "dive-be/laravel-lingo",
+    "description": "Import and export translations from CSV files",
+    "keywords": ["dive", "laravel", "lingo"],
+    "homepage": "https://github.com/dive-be/laravel-lingo",
     "license": "MIT",
     "authors": [
         {
@@ -33,8 +30,8 @@
     },
     "autoload": {
         "psr-4": {
-            "Dive\\TranslationImport\\": "src",
-            "Dive\\TranslationImport\\Database\\Factories\\": "database/factories"
+            "Dive\\Lingo\\": "src",
+            "Dive\\Lingo\\Database\\Factories\\": "database/factories"
         }
     },
     "autoload-dev": {
@@ -56,10 +53,10 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Dive\\TranslationImport\\TranslationImportServiceProvider"
+                "LingoServiceProvider"
             ],
             "aliases": {
-                "TranslationImport": "Dive\\TranslationImport\\Facades\\TranslationImport"
+                "TranslationImport": "Dive\\Lingo\\Facades\\TranslationImport"
             }
         }
     },

@@ -2,7 +2,7 @@
 
 namespace Tests\Unit\App\Artisan\Import;
 
-use Dive\TranslationImport\TranslationImport;
+use Dive\Lingo\TranslationImport;
 use Illuminate\Support\Facades\Storage;
 use function Pest\testDirectory;
 

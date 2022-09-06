@@ -1,11 +1,11 @@
 <?php declare(strict_types=1);
 
-namespace Dive\TranslationImport;
+namespace Dive\Lingo;
 
-use Dive\TranslationImport\Commands\InstallPackageCommand;
+use Dive\Lingo\Commands\InstallPackageCommand;
 use Illuminate\Support\ServiceProvider;
 
-class TranslationImportServiceProvider extends ServiceProvider
+class LingoServiceProvider extends ServiceProvider
 {
     public function boot()
     {
@@ -17,7 +17,7 @@ class TranslationImportServiceProvider extends ServiceProvider
 
     public function register()
     {
-        $this->mergeConfigFrom(__DIR__.'/../config/csv-translation-import.php', 'csv-translation-import');
+        $this->mergeConfigFrom(__DIR__.'/../config/lingo.php', 'lingo');
     }
 
     private function registerCommand()
@@ -29,7 +29,7 @@ class TranslationImportServiceProvider extends ServiceProvider
 
     private function registerConfig()
     {
-        $config = 'csv-translation-import.php';
+        $config = 'lingo.php';
 
         $this->publishes([
             __DIR__.'/../config/'.$config => $this->app->configPath($config),

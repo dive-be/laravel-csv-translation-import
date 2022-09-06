@@ -1,6 +1,6 @@
 <?php
 
-namespace Dive\TranslationImport;
+namespace Dive\Lingo;
 
 use Dive\Crowbar\Crowbar;
 use Illuminate\Support\Arr;

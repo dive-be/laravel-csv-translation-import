@@ -5,13 +5,11 @@ namespace Tests;
 use function Pest\Laravel\artisan;
 
 afterAll(function () {
-    file_exists(config_path('csv-translation-import.php')) && unlink(config_path('csv-translation-import.php'));
+    file_exists(config_path('lingo.php')) && unlink(config_path('lingo.php'));
 });
 
 it('copies the config', function () {
-    artisan('laravel-csv-translation-import:install')->execute();
+    artisan('lingo:install')->execute();
 
-    expect(
-        file_exists(config_path('csv-translation-import.php'))
-    )->toBeTrue();
+    expect(file_exists(config_path('lingo.php')))->toBeTrue();
 });
