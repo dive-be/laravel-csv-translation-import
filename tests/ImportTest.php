@@ -2,12 +2,12 @@
 
 namespace Tests\Unit\App\Artisan\Import;
 
-use Dive\Lingo\TranslationImport;
+use Dive\Lingo\Lingo;
 use Illuminate\Support\Facades\Storage;
 use function Pest\testDirectory;
 
 it('can load existing translations (and loading strips newlines)', function () {
-    $translations = TranslationImport::make()
+    $translations = Lingo::make()
         // if we want to start with our existing TL
         ->load(['en', 'fr'])
         ->toArray();
@@ -36,7 +36,7 @@ it('can load existing translations (and loading strips newlines)', function () {
 });
 
 it('can load existing translations from separate directory', function () {
-    $translations = TranslationImport::make()
+    $translations = Lingo::make()
         // we want to load the slightly altered alternate translations
         ->load(['en', 'fr'], testDirectory('Files/alternate'));
 
@@ -67,7 +67,7 @@ it('can populate the translations based on a csv file', function () {
         b2b/wishlist-add;Toevoegen aan favorieten;Añadir a favoritos
         CSV;
 
-    $translations = TranslationImport::make()
+    $translations = Lingo::make()
         ->parseString($csv, ['nl'])
         ->toArray();
 
@@ -88,7 +88,7 @@ it('trims the contents of the keys and values if needed', function () {
              b2b/wishlist-add;    Toevoegen aan favorieten   ;       Añadir a favoritos
         CSV;
 
-    $translations = TranslationImport::make()
+    $translations = Lingo::make()
         ->parseString($csv, ['nl'])
         ->toArray();
 
@@ -109,7 +109,7 @@ it('can sort the keys alphabetically (and reversed)', function () {
         greeting.goodbye;Farewell
         CSV;
 
-    $translations = TranslationImport::make()
+    $translations = Lingo::make()
         ->parseString($csv, ['en']);
 
     $regular = $translations->sort(ascending: true)->toArray();
@@ -126,7 +126,7 @@ it('can sort the keys alphabetically (and reversed)', function () {
 });
 
 it('can source translations from a file', function () {
-    $translations = TranslationImport::make()
+    $translations = Lingo::make()
         ->parseFile(testDirectory('Files/translations.csv'), ['nl'])
         ->toArray();
 
@@ -140,7 +140,7 @@ it('can source translations from a file', function () {
 });
 
 it('can source translations from a file with a header offset', function () {
-    $translations = TranslationImport::make()
+    $translations = Lingo::make()
         ->parseFile(testDirectory('Files/translations_header_offset.csv'), ['nl'], headerOffset: 2)
         ->toArray();
 
@@ -160,7 +160,7 @@ it('skips keys that are empty', function () {
         ;empty;key
         CSV;
 
-    $translations = TranslationImport::make()
+    $translations = Lingo::make()
         ->parseString($csv, ['nl'])
         ->toArray();
 
@@ -179,7 +179,7 @@ it('populates keys as empty if locale is missing', function () {
         b2b/wishlist-add;Toevoegen aan favorieten;Añadir a favoritos
         CSV;
 
-    $translations = TranslationImport::make()
+    $translations = Lingo::make()
         ->parseString($csv, ['fr'])
         ->toArray();
 
@@ -200,7 +200,7 @@ it('replaces values when loading data if key already exists', function () {
         b2b/wishlist-add;Toevoegen aan favorieten;Añadir a favoritos
         CSV;
 
-    $translit = TranslationImport::make()
+    $translit = Lingo::make()
         ->parseString($csv, ['nl']);
 
     $this->assertEquals([
@@ -235,7 +235,7 @@ it('does not replace values when loading data if behavior is modified', function
         b2b/wishlist-add;Toevoegen aan favorieten;Añadir a favoritos
         CSV;
 
-    $translit = TranslationImport::make()
+    $translit = Lingo::make()
         ->parseString($csv, ['nl']);
 
     $this->assertEquals([
@@ -278,7 +278,7 @@ it('can persist translations', function () {
 
     $path = $disk->path('');
 
-    TranslationImport::make()
+    Lingo::make()
         ->parseString($csv, 'nl')
         ->persist('nl', $path);
 

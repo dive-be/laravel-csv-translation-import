@@ -1,6 +1,6 @@
-# Import translations from CSV files
+# Laravel Lingo
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/dive-be/laravel-csv-translation-import.svg?style=flat-square)](https://packagist.org/packages/dive-be/laravel-csv-translation-import)
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/dive-be/laravel-lingo.svg?style=flat-square)](https://packagist.org/packages/dive-be/laravel-lingo)
 
 ⚠️ Minor releases of this package may cause breaking changes as it has no stable release yet.
 
@@ -13,7 +13,7 @@ Sometimes, clients will use translation services and supply CSV files with trans
 You can install the package via composer:
 
 ```bash
-composer require dive-be/laravel-csv-translation-import
+composer require dive-be/laravel-lingo
 ```
 
 This is the contents of the published config file:
@@ -48,7 +48,7 @@ auth-login.description;Vul hieronder je gegevens in.;Fill in your details below.
 You can take the loaded translations and save them to your Laravel translations.
 
 ```php
-TranslationImport::make()
+Lingo::make()
     ->parseFile('/path/to/translations.csv', 'nl')
     ->persist('nl');
 ```
@@ -56,16 +56,16 @@ TranslationImport::make()
 You may wish to load the existing translations from your Laravel app first, and then save (overwrite) the merged list of translations:
 
 ```php
-TranslationImport::make()
+Lingo::make()
     ->load('nl')
     ->parseFile('/path/to/translations.csv', 'nl')
     ->persist('nl');
 ```
 
-If you do not want to override translation keys that already exist (and only import new ones), you can configure the `TranslationImport` instance, like this:
+If you do not want to override translation keys that already exist (and only import new ones), you can configure the `Lingo` instance, like this:
 
 ```php
-TranslationImport::make()
+Lingo::make()
     ->configure(replacesExistingValues: false)
     ->load('es')
     ->parseFile('/path/to/translations.csv', 'es')

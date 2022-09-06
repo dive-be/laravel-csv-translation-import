@@ -54,7 +54,7 @@ class Translations
 
     private static function getFilePaths(string $path = null): Collection
     {
-        $excludeFiles = collect(config('csv-translation-import.exclude', []));
+        $excludeFiles = collect(config('lingo.exclude', []));
 
         return collect(File::allFiles($path))
             ->map(static fn($file) => ltrim(

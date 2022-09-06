@@ -7,7 +7,7 @@ use Symfony\Component\VarExporter\Exception\ExceptionInterface;
 use Symfony\Component\VarExporter\VarExporter;
 use League\Csv\Reader;
 
-class TranslationImport
+class Lingo
 {
     public static function make(...$arguments)
     {

@@ -56,7 +56,7 @@
                 "LingoServiceProvider"
             ],
             "aliases": {
-                "TranslationImport": "Dive\\Lingo\\Facades\\TranslationImport"
+                "Lingo": "Dive\\Lingo\\Facades\\Lingo"
             }
         }
     },
