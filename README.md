@@ -26,13 +26,13 @@ return [
 
 ## Usage
 
-A common usage is to load specific translations from a CSV file. 
+A common usage is to load or export specific translations from a CSV file. 
 
-### CSV file constraints
+### CSV file constraints (for importing translations)
 
 * The CSV file must have headers corresponding to the different locales.
 * The translation key's header must be `key`.
-* You must also use a semicolon (`;`) to separate columns.
+* By default, you must use a semicolon (`;`) to separate columns. (You can modify the delimiter character.)
 * You cannot have duplicate column names (you may wish to rename empty columns after exporting from Excel or Numbers).
 
 A valid file looks like this:
@@ -45,7 +45,9 @@ auth-login.description;Vul hieronder je gegevens in.;Fill in your details below.
 
 ### Example usage
 
-You can take the loaded translations and save them to your Laravel translations.
+#### Saving loaded translations to your local Laravel project
+
+You can take the loaded translations and save them to your local Laravel project.
 
 ```php
 Lingo::make()
@@ -62,15 +64,33 @@ Lingo::make()
     ->persist('nl');
 ```
 
-If you do not want to override translation keys that already exist (and only import new ones), you can configure the `Lingo` instance, like this:
+If you do not want to override translation keys that already exist (and only import new ones), you can configure this when parsing the file:
 
 ```php
 Lingo::make()
-    ->configure(replacesExistingValues: false)
     ->load('es')
-    ->parseFile('/path/to/translations.csv', 'es')
+    ->parseFile(
+        filePath: '/path/to/translations.csv', 
+        locales: 'es',
+        replacingExistingValues: false,
+    )
     ->persist('es');
 ```
+
+#### Exporting to a CSV file
+
+Another common use case is exporting your translations to a CSV file, so you can send these to a client or translator. 
+
+**Note**: If you have keys for translations that only exist for a given language, you may wish to _load all_ translations, and export for all languages. This way you can get the union of all translation keys across all those languages, along with the localized version. If translations are missing, those fields will be left empty.
+
+This can easily be accomplished like this:
+
+```php
+Lingo::make()
+    ->load($languages = ['en', 'nl', 'fr'])
+    ->exportToCsvFile('path/to/output.csv', $languages);
+```
+
 
 ## Testing
 

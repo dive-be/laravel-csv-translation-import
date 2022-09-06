@@ -276,11 +276,9 @@ it('can persist translations', function () {
 
     $disk = Storage::fake('translations');
 
-    $path = $disk->path('');
-
     Lingo::make()
         ->parseString($csv, 'nl')
-        ->persist('nl', $path);
+        ->persist('nl', $disk->path(''));
 
     $expectedTranslationFile = <<<TL
     <?php declare(strict_types=1);
@@ -297,6 +295,54 @@ it('can persist translations', function () {
 
     $this->assertEquals(
         $expectedTranslationFile,
-        file_get_contents($path . '/nl/b2b/ticket.php')
+        $disk->get('/nl/b2b/ticket.php')
     );
+});
+
+it('can export data to a csv string', function () {
+    $csv = <<<CSV
+        key;nl;en
+        b2b/ticket-summary.title;Overzicht;Overview
+        b2b/ticket-summary.description;"Dit is het overzicht";"This is the overview"
+        b2b/ticket-total;Totaal;Total\n
+        CSV;
+
+    $output = Lingo::make()
+        ->parseString($csv, ['nl', 'en'])
+        ->toCsvString(['nl', 'en']);
+
+    $this->assertEquals($csv, $output);
+});
+
+it('can export data to a csv file', function () {
+    $csv = <<<CSV
+        key;nl;en
+        b2b/ticket-summary.title;Overzicht;Overview
+        b2b/ticket-summary.description;"Dit is het overzicht";"This is the overview"
+        b2b/ticket-total;Totaal;Total\n
+        CSV;
+
+    $disk = Storage::fake('csv');
+
+    Lingo::make()
+        ->parseString($csv, ['nl', 'en'])
+        ->exportToCsvFile($disk->path('export.csv'), ['nl', 'en']);
+
+    $this->assertEquals($csv, $disk->get('export.csv'));
+});
+
+it('can export data sourced from Laravel translations to a csv file', function () {
+    $csv = Lingo::make()
+        ->load(['en', 'fr'], testDirectory('Files/key_mismatch'))
+        ->toCsvString( ['en', 'fr']);
+
+    // Note the empty values for FR's `passwords-reset` and EN's `passwords-throttled`!
+    $expected = <<<CSV
+    key;en;fr
+    passwords-reset;"Your password has been reset!";
+    passwords-sent;"We have emailed your password reset link!";"Nous vous avons envoyé par email le lien de réinitialisation du mot de passe !"
+    passwords-throttled;;"Veuillez patienter avant de réessayer."\n
+    CSV;
+
+    $this->assertEquals($expected, $csv);
 });
